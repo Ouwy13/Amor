@@ -1,0 +1,509 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #000;
+  min-height: 100vh;
+  overflow-x: hidden;
+  font-family: "Courier New", Courier, monospace;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+}
+
+/* Fundo com estrelas orbitais - ATRÁS do conteúdo */
+.stars-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1; /* Atrás do conteúdo */
+  pointer-events: none;
+}
+
+#canvas {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.6; /* Mais sutil para não competir com o conteúdo */
+}
+
+/* Bloco de notas - ACIMA das estrelas */
+.notes-container {
+  position: relative;
+  z-index: 10; /* Acima das estrelas */
+  width: 100%;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  animation: note-fade-in 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  opacity: 0;
+  transform: translateY(50px) scale(0.95);
+  will-change: transform, opacity;
+}
+
+@keyframes note-fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.note-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 20px 20px 0 0;
+}
+
+.note-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.control-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.control-dot:hover {
+  opacity: 1;
+}
+
+.control-dot.red {
+  background: #ff5f57;
+}
+.control-dot.yellow {
+  background: #ffbd2e;
+}
+.control-dot.green {
+  background: #28ca42;
+}
+
+.note-title {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 600;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.5px;
+}
+
+.note-date {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 15px;
+}
+
+.note-content {
+  padding: 40px 28px;
+  color: #fff;
+  line-height: 1.8;
+}
+
+/* Foto do casal - ACIMA das mensagens */
+.photo-container {
+  margin-bottom: 40px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: message-fade-in 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.5s forwards;
+}
+
+/* Grid de fotos - duas fotos lado a lado */
+.photos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.photo-frame {
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 15px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.photo-frame:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.couple-photo {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.couple-photo:hover {
+  transform: scale(1.02);
+}
+
+.photo-caption {
+  margin-top: 12px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Seção de vídeos - mesmo estilo das fotos */
+.video-container {
+  margin-bottom: 40px;
+  margin-top: 40px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: message-fade-in 1.2s cubic-bezier(0.4, 0, 0.2, 1) 2.4s forwards;
+}
+
+/* Grid de vídeos - vídeo principal em cima, demais abaixo */
+.videos-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Vídeo principal (maior) */
+.video-frame--main {
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.video-frame--main:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.video-frame--main .couple-video {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Container dos vídeos secundários */
+.videos-secondary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+/* Vídeos secundários (maiores agora) */
+.video-frame--secondary {
+  background: rgba(255, 255, 255, 0.02);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 15px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.video-frame--secondary:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.video-frame--secondary .couple-video {
+  width: 100%;
+  height: 280px; /* Aumentado de 180px para 280px */
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.couple-video:hover {
+  transform: scale(1.02);
+}
+
+.video-caption {
+  margin-top: 12px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+/* Responsivo para vídeos */
+@media (max-width: 768px) {
+  .videos-secondary {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .video-frame--main .couple-video {
+    height: 250px;
+  }
+
+  .video-frame--secondary .couple-video {
+    height: 320px; /* Aumentado para mobile também */
+  }
+
+  .videos-grid {
+    max-width: 350px;
+  }
+
+  .video-caption {
+    font-size: 16px;
+    margin-top: 15px;
+  }
+
+  .video-frame--main,
+  .video-frame--secondary {
+    padding: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .videos-grid {
+    max-width: 300px;
+  }
+
+  .video-frame--main .couple-video {
+    height: 200px;
+  }
+
+  .video-frame--secondary .couple-video {
+    height: 250px; /* Aumentado para mobile pequeno */
+  }
+
+  .video-caption {
+    font-size: 15px;
+  }
+
+  .video-frame--main,
+  .video-frame--secondary {
+    padding: 15px;
+  }
+}
+
+/* Estilo personalizado para controles de vídeo */
+.couple-video::-webkit-media-controls-panel {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.couple-video::-webkit-media-controls-play-button,
+.couple-video::-webkit-media-controls-pause-button {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+}
+
+.message-block {
+  margin-bottom: 40px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: message-fade-in 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.message-block:nth-child(3) {
+  animation-delay: 1.2s;
+}
+.message-block:nth-child(5) {
+  animation-delay: 1.8s;
+}
+
+@keyframes message-fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-text {
+  font-size: 17px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.3px;
+}
+
+.message-text p {
+  margin-bottom: 18px;
+}
+
+.message-text strong {
+  color: #fff;
+  text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.message-text em {
+  color: rgba(255, 255, 255, 0.9);
+  font-style: italic;
+}
+
+.message-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  margin: 40px 0;
+}
+
+.note-footer {
+  padding: 24px 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 0 0 20px 20px;
+  text-align: center;
+}
+
+.footer-text {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 17px;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.5px;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .notes-container {
+    margin: 15px;
+    max-width: none;
+  }
+
+  .note-header {
+    padding: 20px 24px;
+    flex-direction: column;
+    gap: 15px;
+    text-align: center;
+  }
+
+  .note-content {
+    padding: 30px 24px;
+  }
+
+  .message-text {
+    font-size: 16px;
+  }
+
+  .note-title {
+    font-size: 18px;
+  }
+
+  .couple-photo {
+    max-width: 250px;
+  }
+}
+
+@media (max-width: 480px) {
+  .note-content {
+    padding: 25px 20px;
+  }
+
+  .message-text {
+    font-size: 15px;
+  }
+
+  .couple-photo {
+    max-width: 200px;
+  }
+}
+
+/* Responsivo - Mobile */
+@media (max-width: 768px) {
+  .photos-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+    max-width: 300px;
+  }
+
+  .couple-photo {
+    height: 250px;
+  }
+
+  .photo-caption {
+    font-size: 16px;
+    margin-top: 15px;
+  }
+
+  .photo-frame {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .photos-grid {
+    max-width: 280px;
+  }
+
+  .couple-photo {
+    height: 220px;
+  }
+
+  .photo-caption {
+    font-size: 15px;
+  }
+
+  .photo-frame {
+    padding: 15px;
+  }
+}
+
+/* Ajustes adicionais para mobile */
+@media (max-width: 480px) {
+  .note-content {
+    padding: 20px 15px;
+  }
+
+  .message-text {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .note-title {
+    font-size: 16px;
+  }
+
+  .note-header {
+    padding: 15px 20px;
+  }
+}
+
+/* Efeito de fade out para transições */
+body.fade-out {
+  opacity: 0;
+  transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}

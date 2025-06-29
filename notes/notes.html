@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amor com Propósito</title>
+    <link rel="stylesheet" href="notes.css" />
+  </head>
+  <body>
+    <audio
+      id="bg-music"
+      src="../Music/Terceira.mp3"
+      style="display: none"
+    ></audio>
+    <!-- Fundo com estrelas orbitais -->
+    <div class="stars-background">
+      <canvas id="canvas"></canvas>
+    </div>
+
+    <!-- Bloco de notas -->
+    <div class="notes-container">
+      <div class="note-header">
+        <div class="note-controls">
+          <div class="control-dot red"></div>
+          <div class="control-dot yellow"></div>
+          <div class="control-dot green"></div>
+        </div>
+        <div class="note-title">Amor com Propósito ❤️‍🔥</div>
+        <div class="note-date" id="currentDate"></div>
+      </div>
+
+      <div class="note-content">
+        <!-- Fotos do casal ACIMA das mensagens -->
+        <div class="photo-container" id="photoContainer">
+          <div class="photos-grid">
+            <div class="photo-frame">
+              <img
+                src="../images/amor.jpeg"
+                alt="Nosso amor"
+                class="couple-photo"
+              />
+              <div class="photo-caption">💝🎁</div>
+            </div>
+            <div class="photo-frame">
+              <img
+                src="../images/maiza-solo.jpeg"
+                alt="Maiza"
+                class="couple-photo"
+              />
+              <div class="photo-caption">Oiá ela Zangada 😺</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="message-divider"></div>
+
+        <div class="message-block" id="message1">
+          <div class="message-text">
+            <!-- Primeira mensagem será inserida aqui -->
+            <p>Carregando primeira mensagem...</p>
+          </div>
+        </div>
+
+        <div class="message-divider"></div>
+
+        <div class="message-block" id="message2">
+          <div class="message-text">
+            <!-- Segunda mensagem será inserida aqui -->
+            <p>Carregando segunda mensagem...</p>
+          </div>
+        </div>
+
+        <div class="message-divider"></div>
+
+        <!-- Seção de vídeos -->
+        <div class="video-container" id="videoContainer">
+          <div class="videos-grid">
+            <!-- Vídeo principal (landscape) em cima -->
+            <div class="video-frame video-frame--main">
+              <video
+                src="../Video/Primeiro.mp4"
+                class="couple-video"
+                controls
+                preload="metadata"
+                poster="/placeholder.svg?height=576&width=1024"
+              ></video>
+              <div class="video-caption">
+                Na sua pior versão, vc seria suficiente para a pessoa certa...
+              </div>
+            </div>
+
+            <!-- Vídeos menores abaixo em linha -->
+            <div class="videos-secondary">
+              <div class="video-frame video-frame--secondary">
+                <video
+                  src="../Video/Segundo.mp4"
+                  class="couple-video"
+                  controls
+                  preload="metadata"
+                  poster="/placeholder.svg?height=1024&width=579"
+                ></video>
+                <div class="video-caption">
+                  É complicado compreendemos quem nos confrota, mas pode ser um
+                  passo da mudança de vida...
+                </div>
+              </div>
+              <div class="video-frame video-frame--secondary">
+                <video
+                  src="../Video/Terceiro.mp4"
+                  class="couple-video"
+                  controls
+                  preload="metadata"
+                  poster="/placeholder.svg?height=1024&width=579"
+                ></video>
+                <div class="video-caption">
+                  A mudança só existe quando a pessoa que deve mudar se sentir
+                  incomodada consigo mesma e perceber q está errada...
+                </div>
+              </div>
+              <div class="video-frame video-frame--secondary">
+                <video
+                  src="../Video/Quarto.mp4"
+                  class="couple-video"
+                  controls
+                  preload="metadata"
+                  poster="/placeholder.svg?height=1024&width=579"
+                ></video>
+                <div class="video-caption">
+                  Relacionamento é uma escolha diária! Todos os dias você acorda
+                  e ESCOLHE se torna a pessoa certa para o seu cônjuge, amor é
+                  escolha...
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="note-footer">
+        <div class="footer-text">
+          Deu trabanho, mas espero que compreenda... ❤️‍🩹
+        </div>
+      </div>
+    </div>
+
+    <script src="notes.js"></script>
+    <script>
+      window.addEventListener("DOMContentLoaded", function () {
+        var audio = document.getElementById("bg-music");
+        audio.volume = 1;
+
+        function playMusicOnce() {
+          audio.play().catch(function (e) {
+            // Se o navegador bloquear, tente novamente no próximo clique
+          });
+          document.body.removeEventListener("click", playMusicOnce);
+          document.body.removeEventListener("touchstart", playMusicOnce);
+        }
+
+        document.body.addEventListener("click", playMusicOnce);
+        document.body.addEventListener("touchstart", playMusicOnce);
+      });
+    </script>
+    <!-- Script das estrelas orbitais -->
+    <script type="text/javascript">
+      var canvas = document.getElementById("canvas"),
+        ctx = canvas.getContext("2d"),
+        w = (canvas.width = window.innerWidth),
+        h = (canvas.height = window.innerHeight),
+        hue = 217,
+        stars = [],
+        count = 0,
+        maxStars = 800; // Reduzido para melhor performance
+
+      var canvas2 = document.createElement("canvas"),
+        ctx2 = canvas2.getContext("2d");
+      canvas2.width = 100;
+      canvas2.height = 100;
+
+      var half = canvas2.width / 2,
+        gradient2 = ctx2.createRadialGradient(half, half, 0, half, half, half);
+      gradient2.addColorStop(0.025, "#CCC");
+      gradient2.addColorStop(0.1, "hsl(" + hue + ", 63%, 33%)");
+      gradient2.addColorStop(0.25, "hsl(" + hue + ", 64%, 6%)");
+      gradient2.addColorStop(1, "transparent");
+
+      ctx2.fillStyle = gradient2;
+      ctx2.beginPath();
+      ctx2.arc(half, half, half, 0, Math.PI * 2);
+      ctx2.fill();
+
+      function random(min, max) {
+        if (arguments.length < 2) {
+          max = min;
+          min = 0;
+        }
+
+        if (min > max) {
+          var hold = max;
+          max = min;
+          min = hold;
+        }
+
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function maxOrbit(x, y) {
+        var max = Math.max(x, y),
+          diameter = Math.round(Math.sqrt(max * max + max * max));
+        return diameter / 2;
+      }
+
+      var Star = function () {
+        this.orbitRadius = random(maxOrbit(w, h));
+        this.radius = random(60, this.orbitRadius) / 12; // Estrelas menores
+        this.orbitX = w / 2;
+        this.orbitY = h / 2;
+        this.timePassed = random(0, maxStars);
+        this.speed = random(this.orbitRadius) / 80000; // Movimento mais lento
+        this.alpha = random(3, 8) / 10; // Mais suaves
+
+        count++;
+        stars[count] = this;
+      };
+
+      Star.prototype.draw = function () {
+        var x = Math.sin(this.timePassed) * this.orbitRadius + this.orbitX,
+          y = Math.cos(this.timePassed) * this.orbitRadius + this.orbitY,
+          twinkle = random(15); // Menos twinkle
+
+        if (twinkle === 1 && this.alpha > 0.2) {
+          this.alpha -= 0.03;
+        } else if (twinkle === 2 && this.alpha < 0.8) {
+          this.alpha += 0.03;
+        }
+
+        ctx.globalAlpha = this.alpha;
+        ctx.drawImage(
+          canvas2,
+          x - this.radius / 2,
+          y - this.radius / 2,
+          this.radius,
+          this.radius
+        );
+        this.timePassed += this.speed;
+      };
+
+      for (var i = 0; i < maxStars; i++) {
+        new Star();
+      }
+
+      function animation() {
+        ctx.globalCompositeOperation = "source-over";
+        ctx.globalAlpha = 0.8; // Fade mais suave
+        ctx.fillStyle = "hsla(" + hue + ", 64%, 3%, 0.8)"; // Fundo mais escuro
+        ctx.fillRect(0, 0, w, h);
+
+        ctx.globalCompositeOperation = "lighter";
+        for (var i = 1, l = stars.length; i < l; i++) {
+          stars[i].draw();
+        }
+
+        window.requestAnimationFrame(animation);
+      }
+
+      // Redimensionar canvas quando a janela muda
+      window.addEventListener("resize", function () {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+
+        // Reposicionar estrelas
+        for (var i = 1; i < stars.length; i++) {
+          if (stars[i]) {
+            stars[i].orbitX = w / 2;
+            stars[i].orbitY = h / 2;
+            stars[i].orbitRadius = random(maxOrbit(w, h));
+          }
+        }
+      });
+
+      animation();
+    </script>
+  </body>
+</html>
